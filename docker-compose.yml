@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    container_name: wanderlust-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/.env:/app/.env
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: wanderlust-frontend
+    ports:
+      - "3001:3000"
+
+  mongo:
+    image: mongo:4.4
+    container_name: wanderlust-mongo
+    restart: always
+    ports:
+      - "27017:27017"
