@@ -6,8 +6,8 @@ services:
     container_name: wanderlust-backend
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend/.env:/app/.env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/wanderlust
     depends_on:
       - mongo
 
