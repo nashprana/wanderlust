@@ -1,21 +1,18 @@
-import mongoose from 'mongoose';
-import { MONGODB_URI } from './utils.js';
-export default function connectDB() {
+import mongoose from "mongoose";
+
+export default async function connectDB() {
   try {
-    mongoose.connect(MONGODB_URI);
+    const uri = process.env.MONGO_URI;
+
+    if (!uri) {
+      throw new Error("MONGO_URI is missing ❌");
+    }
+
+    await mongoose.connect(uri);
+
+    console.log("✅ MongoDB Connected");
   } catch (err) {
-    console.error(err.message);
+    console.error("❌ DB Error:", err.message);
     process.exit(1);
   }
-
-  const dbConnection = mongoose.connection;
-
-  dbConnection.once('open', () => {
-    console.log(`Database connected: ${MONGODB_URI}`);
-  });
-
-  dbConnection.on('error', (err) => {
-    console.error(`connection error: ${MONGODB_URI}`);
-  });
-  return;
 }
