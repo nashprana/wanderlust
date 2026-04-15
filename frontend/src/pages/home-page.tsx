@@ -5,6 +5,7 @@ import PostCard from '@/components/post-card';
 import Post from '@/types/post-type';
 import { PostCardSkeleton } from '@/components/skeletons/post-card-skeleton';
 import Header from '@/layouts/header-layout';
+
 function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
 
@@ -12,7 +13,9 @@ function HomePage() {
     axios
       .get(import.meta.env.VITE_API_PATH + '/api/posts')
       .then((response) => {
-        setPosts(response.data);
+        // 🔥 FIX: ensure array
+        const data = response.data?.posts || response.data || [];
+        setPosts(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.error(error);
@@ -32,7 +35,9 @@ function HomePage() {
             ? Array(8)
                 .fill(0)
                 .map((_, index) => <PostCardSkeleton key={index} />)
-            : posts.map((post) => <PostCard key={post._id} post={post} />)}
+            : (Array.isArray(posts) ? posts : []).map((post) => (
+                <PostCard key={post._id} post={post} />
+              ))}
         </div>
       </div>
     </div>
