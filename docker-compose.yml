@@ -12,7 +12,10 @@ services:
       - mongo
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://54.36.236.173:5000
     container_name: wanderlust-frontend
     ports:
       - "3001:3000"
